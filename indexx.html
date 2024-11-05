@@ -5,36 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Finance Tracker</title>
     <style>
-        /* Base Styles */
         body {
             font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background-color: #f0f2f5;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            min-height: 100vh;
-            color: #333;
         }
         .container {
-            width: 100%;
-            max-width: 400px;
+            width: 350px;
+            background-color: #ffffff;
             padding: 20px;
-            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: #333;
         }
         h2 {
-            text-align: center;
             color: #4CAF50;
+            text-align: center;
         }
         .input-group {
-            margin-bottom: 15px;
+            margin: 15px 0;
         }
         .input-group label {
             display: block;
-            font-weight: bold;
             margin-bottom: 5px;
+            color: #555;
         }
         .input-group input {
             width: 100%;
@@ -42,25 +40,104 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .summary {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .summary div {
-            flex: 1;
-            text-align: center;
-        }
-        .summary .balance {
-            font-weight: bold;
-            color: #4CAF50;
-        }
-        button {
+        .btn {
             width: 100%;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
+            font-size: 16px;
             cursor: pointer;
-            font-size: 16px
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .balance {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+        }
+        .transactions {
+            margin-top: 20px;
+        }
+        .transactions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .transactions li {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .transactions .income {
+            color: green;
+        }
+        .transactions .expense {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Personal Finance Tracker</h2>
+    <div class="balance" id="balance">Balance: $0.00</div>
+
+    <div class="input-group">
+        <label for="description">Description</label>
+        <input type="text" id="description" placeholder="Enter description">
+    </div>
+
+    <div class="input-group">
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" placeholder="Enter amount">
+    </div>
+
+    <button class="btn" onclick="addTransaction()">Add Transaction</button>
+
+    <div class="transactions">
+        <h3>Transactions</h3>
+        <ul id="transactionList"></ul>
+    </div>
+</div>
+
+<script>
+    let balance = 0;
+    const transactionList = document.getElementById('transactionList');
+    const balanceDisplay = document.getElementById('balance');
+
+    function addTransaction() {
+        const description = document.getElementById('description').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+
+        if (!description || isNaN(amount)) {
+            alert("Please enter a valid description and amount.");
+            return;
+        }
+
+        // Update balance
+        balance += amount;
+        balanceDisplay.textContent = `Balance: $${balance.toFixed(2)}`;
+
+        // Create transaction entry
+        const transaction = document.createElement('li');
+        transaction.classList.add(amount > 0 ? 'income' : 'expense');
+        transaction.innerHTML = `${description} <span>${amount > 0 ? '+' : ''}$${amount.toFixed(2)}</span>`;
+
+        // Append transaction to the list
+        transactionList.appendChild(transaction);
+
+        // Clear input fields
+        document.getElementById('description').value = '';
+        document.getElementById('amount').value = '';
+    }
+</script>
+
+</body>
+</html>
